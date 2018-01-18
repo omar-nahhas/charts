@@ -2,12 +2,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
   labels:
     app: {{ template "grafana.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Values.server.name }}"
     heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    release: "{{ .Release.Name }}"    
   name: {{ template "grafana.server.fullname" . }}-set-datasource
 spec:
   activeDeadlineSeconds: {{ .Values.server.setDatasource.activeDeadlineSeconds }}
